@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>DuetRight — Real Seattle Transformations</title>
+<style>
+  :root{
+    --amber:#FFBB2F;--orange:#FF8A3D;--amber-deep:#c26a00;--ink:#2C2B2E;--muted:#5c5b5d;
+    --faint:#8a898b;--paper:#FFFDFA;--line:rgba(44,43,46,.1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper)}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px clamp(14px,4vw,36px) 48px}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--amber-deep)}
+  h1{margin:6px 0 0;font-size:clamp(24px,4vw,36px);font-weight:800;letter-spacing:-.8px}
+  .sub{margin:10px 0 26px;max-width:640px;font-size:15px;line-height:1.6;color:var(--muted)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+  .item{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .ba{position:relative;aspect-ratio:4/3;user-select:none;touch-action:none;overflow:hidden;background:#eee}
+  .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+  .ba .beforeWrap{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
+  .ba .divider{position:absolute;top:0;bottom:0;left:var(--p,50%);width:3px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.4);transform:translateX(-50%)}
+  .ba .knob{position:absolute;top:50%;left:var(--p,50%);transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;
+    background:linear-gradient(135deg,var(--amber),var(--orange));box-shadow:0 2px 8px rgba(0,0,0,.35);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;letter-spacing:-1px}
+  .ba .tag{position:absolute;top:10px;font-size:10px;font-weight:800;letter-spacing:1.2px;padding:4px 9px;border-radius:6px;color:#fff;background:rgba(30,29,31,.62)}
+  .ba .tag.b{left:10px}.ba .tag.a{right:10px}
+  .meta{padding:14px 16px 16px}
+  .meta .loc{font-size:10.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--amber-deep)}
+  .meta h3{margin:4px 0 4px;font-size:16px;font-weight:800;letter-spacing:-.3px}
+  .meta p{margin:0 0 10px;font-size:13.5px;line-height:1.55;color:var(--muted)}
+  .meta a{font-size:13.5px;font-weight:700;color:var(--amber-deep);text-decoration:none}
+  .note{font-size:12.5px;color:var(--faint);margin-top:22px;line-height:1.6}
+  .cta{display:inline-block;background:linear-gradient(135deg,var(--amber),var(--orange));color:var(--ink);
+    font-weight:700;font-size:15px;padding:13px 28px;border-radius:10px;text-decoration:none;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">Drag the handle · Real jobs, real photos</div>
+  <h1>Seattle transformations, before &amp; after</h1>
+  <p class="sub">Every pair below is from a real DuetRight project with its own published story — same room, same camera angle, no staging tricks.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <a class="cta" href="https://www.duetright.com/contact" target="_top">Start your own transformation &rarr;</a>
+  <p class="note">All photos are from projects published on our blog with the client's blessing. Drag the amber handle — left shows the before, right shows the after.</p>
+</div>
+
+<script>
+  var ITEMS = [
+    {loc:"Capitol Hill", title:"1928 condo bath, tub to walk-in", desc:"Cast-iron tub and pedestal sink out; walk-in shower, pony wall, and a full-height pantry-side reveal in 4 weeks.",
+     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/6a4bc63bfa7bc10b0d896151_before-cara-bathroom-doorway-view.png",
+     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/6a4bdbfcd4b19d2f63a45dd0_after-cara-bathroom-doorway-view.png",
+     url:"https://www.duetright.com/blog/4-week-capitol-hill-bathroom-renovation"},
+    {loc:"Queen Anne", title:"Tom's condo bathroom, wall to wall", desc:"Dated wood vanity and worn fixtures to gray tile, black hardware, and a clean modern line.",
+     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf01189c3e684418c3805b_queen-anne-bathroom-before-full.png",
+     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf038858d61571427f3db7_queen-anne-bathroom-after-full.png",
+     url:"https://www.duetright.com/blog/small-bathroom-remodel-in-queen-anne"},
+    {loc:"Queen Anne", title:"The vanity wall, up close", desc:"Same renovation, tighter frame: stock clutter to a wood cabinet, oval mirror, and sconces.",
+     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf01a1b8267bd720c73116_queen-anne-bathroom-before-vanity.png",
+     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf02eccbe0d9354be34199_queen-anne-bathroom-after-vanity.png",
+     url:"https://www.duetright.com/blog/small-bathroom-remodel-in-queen-anne"},
+    {loc:"West Seattle", title:"Microcement tub-to-shower", desc:"White tile tub combo to a seamless microcement walk-in with matte black fixtures.",
+     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/69a9c158d342162700420100_before-inside-shower.png",
+     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/69a9c1e6d342162700421ad0_after-bathroom-showr-inside.png",
+     url:"https://www.duetright.com/blog/microcement-tub-to-shower-conversion-west-seattle"},
+    {loc:"Green Lake", title:"The ultimate double shower", desc:"A standard tub bay reimagined as a dual-head shower built for two schedules.",
+     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68228920b2604c3a0e39a836_Brian-F-Before-Shower-View.png",
+     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/682288993a05b19aa39e48ae_Brian-F-After-Shower-View.png",
+     url:"https://www.duetright.com/blog/green-lake-bathroom-remodel-dual-shower"},
+    {loc:"Madison Park", title:"Spanish tile staircase in 8 days", desc:"Worn painted steps to hand-patterned porcelain and terracotta — finished before the guests landed.",
+     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/686e9b26db1c211606618048_before-steps-angela1.png",
+     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/686e9da07d5d7225ccade7be_after-medium-shot-tiles-angela.png",
+     url:"https://www.duetright.com/blog/spanish-tile-staircase-renovation"}
+  ];
+
+  var grid = document.getElementById('grid');
+  ITEMS.forEach(function(it){
+    var el = document.createElement('div');
+    el.className = 'item';
+    el.innerHTML =
+      '<div class="ba" style="--p:50%">' +
+        '<img class="after" src="'+it.a+'" alt="After: '+it.title+'" loading="lazy">' +
+        '<div class="beforeWrap"><img src="'+it.b+'" alt="Before: '+it.title+'" loading="lazy"></div>' +
+        '<div class="divider"></div><div class="knob">&#8596;</div>' +
+        '<div class="tag b">BEFORE</div><div class="tag a">AFTER</div>' +
+      '</div>' +
+      '<div class="meta"><div class="loc">'+it.loc+'</div><h3>'+it.title+'</h3><p>'+it.desc+'</p>' +
+      '<a href="'+it.url+'" target="_top">Read the story &rarr;</a></div>';
+    grid.appendChild(el);
+    var ba = el.querySelector('.ba');
+    function setP(clientX){
+      var r = ba.getBoundingClientRect();
+      var p = Math.max(2, Math.min(98, (clientX - r.left) / r.width * 100));
+      ba.style.setProperty('--p', p + '%');
+    }
+    var dragging = false;
+    ba.addEventListener('pointerdown', function(e){ dragging = true; ba.setPointerCapture(e.pointerId); setP(e.clientX); });
+    ba.addEventListener('pointermove', function(e){ if(dragging) setP(e.clientX); });
+    ba.addEventListener('pointerup', function(){ dragging = false; });
+    ba.addEventListener('pointercancel', function(){ dragging = false; });
+  });
+</script>
+</body>
+</html>
