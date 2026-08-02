@@ -4,10 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>DuetRight — Real Seattle Transformations</title>
+<meta name="robots" content="noindex" />
 <style>
   :root{
     --amber:#FFBB2F;--orange:#FF8A3D;--amber-deep:#c26a00;--ink:#2C2B2E;--muted:#5c5b5d;
     --faint:#8a898b;--paper:#FFFDFA;--line:rgba(44,43,46,.1);
+    --ease-out:cubic-bezier(.22,1,.36,1);
   }
   *{box-sizing:border-box}
   html,body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper)}
@@ -17,13 +19,23 @@
   .sub{margin:10px 0 26px;max-width:640px;font-size:15px;line-height:1.6;color:var(--muted)}
   .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
   .item{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  .ba{position:relative;aspect-ratio:4/3;user-select:none;touch-action:none;overflow:hidden;background:#eee}
+  .ba{position:relative;aspect-ratio:4/3;user-select:none;touch-action:none;overflow:hidden;background:#eee;cursor:ew-resize}
+  .ba:focus-visible{outline:3px solid var(--amber-deep);outline-offset:-3px}
   .ba img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
   .ba .beforeWrap{position:absolute;inset:0;clip-path:inset(0 calc(100% - var(--p,50%)) 0 0)}
   .ba .divider{position:absolute;top:0;bottom:0;left:var(--p,50%);width:3px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,.4);transform:translateX(-50%)}
   .ba .knob{position:absolute;top:50%;left:var(--p,50%);transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;
     background:linear-gradient(135deg,var(--amber),var(--orange));box-shadow:0 2px 8px rgba(0,0,0,.35);
     display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:15px;letter-spacing:-1px}
+  .ba .knob::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid rgba(255,187,47,.9);opacity:0;pointer-events:none}
+  .motion-ok .ba.afford .knob::after{animation:halo 1.8s ease-out infinite}
+  html:not(.motion-ok) .ba.afford .knob::after{opacity:.6;inset:-5px}
+  @keyframes halo{0%{opacity:.85;transform:scale(.72)}70%{opacity:0;transform:scale(1.25)}100%{opacity:0;transform:scale(1.25)}}
+  .ba .hint{position:absolute;left:var(--p,50%);top:calc(50% + 34px);transform:translateX(-50%);
+    background:rgba(30,29,31,.78);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.4px;
+    padding:5px 12px;border-radius:999px;white-space:nowrap;pointer-events:none;opacity:0}
+  .ba.afford .hint{opacity:1}
+  .motion-ok .ba .hint{transition:opacity .3s ease-out}
   .ba .tag{position:absolute;top:10px;font-size:10px;font-weight:800;letter-spacing:1.2px;padding:4px 9px;border-radius:6px;color:#fff;background:rgba(30,29,31,.62)}
   .ba .tag.b{left:10px}.ba .tag.a{right:10px}
   .meta{padding:14px 16px 16px}
@@ -34,13 +46,23 @@
   .note{font-size:12.5px;color:var(--faint);margin-top:22px;line-height:1.6}
   .cta{display:inline-block;background:linear-gradient(135deg,var(--amber),var(--orange));color:var(--ink);
     font-weight:700;font-size:15px;padding:13px 28px;border-radius:10px;text-decoration:none;margin-top:20px}
+  .motion-ok .cta{transition:transform .2s ease-out,box-shadow .2s ease-out}
+  @media(hover:hover) and (pointer:fine){
+    .cta:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(194,106,0,.18)}
+    .motion-ok .item{transition:opacity .55s var(--ease-out),transform .55s var(--ease-out),box-shadow .2s ease-out}
+    .item:hover{box-shadow:0 8px 24px rgba(44,43,46,.10)}
+  }
+  .motion-ok .item{opacity:0;transform:translateY(16px);transition:opacity .55s var(--ease-out),transform .55s var(--ease-out)}
+  .motion-ok .item.is-in{opacity:1;transform:none}
+  .motion-ok .fade-item{opacity:0;transform:translateY(12px);transition:opacity .5s var(--ease-out),transform .5s var(--ease-out)}
+  .motion-ok .fade-item.is-in{opacity:1;transform:none}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="kicker">Drag the handle · Real jobs, real photos</div>
-  <h1>Seattle transformations, before &amp; after</h1>
-  <p class="sub">Every pair below is from a real DuetRight project with its own published story — same room, same camera angle, no staging tricks.</p>
+  <div class="kicker fade-item">Drag the handle &middot; Real jobs, real photos</div>
+  <h1 class="fade-item">Seattle transformations, before &amp; after</h1>
+  <p class="sub fade-item">Every pair below is from a real DuetRight project with its own published story — same room, same camera angle, no staging tricks.</p>
 
   <div class="grid" id="grid"></div>
 
@@ -49,6 +71,16 @@
 </div>
 
 <script>
+(function(){
+  'use strict';
+
+  /* motion governor */
+  var mq = window.matchMedia('(prefers-reduced-motion: no-preference)');
+  function setMotion(){ document.documentElement.classList.toggle('motion-ok', mq.matches); }
+  setMotion();
+  if (mq.addEventListener) mq.addEventListener('change', setMotion);
+  function motion(){ return document.documentElement.classList.contains('motion-ok'); }
+
   var ITEMS = [
     {loc:"Capitol Hill", title:"1928 condo bath, tub to walk-in", desc:"Cast-iron tub and pedestal sink out; walk-in shower, pony wall, and a full-height pantry-side reveal in 4 weeks.",
      b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/6a4bc63bfa7bc10b0d896151_before-cara-bathroom-doorway-view.png",
@@ -76,32 +108,119 @@
      url:"https://www.duetright.com/blog/spanish-tile-staircase-renovation"}
   ];
 
+  /* header entrance */
+  var fadeItems = [].slice.call(document.querySelectorAll('.fade-item'));
+  if (motion()) {
+    setTimeout(function(){
+      fadeItems.forEach(function(el, i){ setTimeout(function(){ el.classList.add('is-in'); }, i * 80); });
+    }, 60);
+  } else { fadeItems.forEach(function(el){ el.classList.add('is-in'); }); }
+
   var grid = document.getElementById('grid');
-  ITEMS.forEach(function(it){
+  var sliders = [];
+
+  ITEMS.forEach(function(it, idx){
     var el = document.createElement('div');
     el.className = 'item';
     el.innerHTML =
-      '<div class="ba" style="--p:50%">' +
+      '<div class="ba" style="--p:50%" tabindex="0" role="slider" aria-label="Before and after comparison: '+it.title+'. Arrow keys move the divider." aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">' +
         '<img class="after" src="'+it.a+'" alt="After: '+it.title+'" loading="lazy">' +
         '<div class="beforeWrap"><img src="'+it.b+'" alt="Before: '+it.title+'" loading="lazy"></div>' +
-        '<div class="divider"></div><div class="knob">&#8596;</div>' +
+        '<div class="divider"></div><div class="knob" aria-hidden="true">&#8596;</div>' +
+        '<div class="hint" aria-hidden="true">Drag to compare</div>' +
         '<div class="tag b">BEFORE</div><div class="tag a">AFTER</div>' +
       '</div>' +
       '<div class="meta"><div class="loc">'+it.loc+'</div><h3>'+it.title+'</h3><p>'+it.desc+'</p>' +
       '<a href="'+it.url+'" target="_top">Read the story &rarr;</a></div>';
     grid.appendChild(el);
+
     var ba = el.querySelector('.ba');
-    function setP(clientX){
-      var r = ba.getBoundingClientRect();
-      var p = Math.max(2, Math.min(98, (clientX - r.left) / r.width * 100));
+    var state = { el: el, ba: ba, touched: false, swept: false, raf: null };
+    sliders.push(state);
+
+    function setP(p){
+      p = Math.max(2, Math.min(98, p));
       ba.style.setProperty('--p', p + '%');
+      ba.setAttribute('aria-valuenow', Math.round(p));
+    }
+    function setPfromX(clientX){
+      var r = ba.getBoundingClientRect();
+      setP((clientX - r.left) / r.width * 100);
+    }
+    state.setP = setP;
+
+    function interact(){
+      if (state.touched) return;
+      state.touched = true;
+      if (state.raf) { cancelAnimationFrame(state.raf); state.raf = null; }
+      ba.classList.remove('afford');
     }
     var dragging = false;
-    ba.addEventListener('pointerdown', function(e){ dragging = true; ba.setPointerCapture(e.pointerId); setP(e.clientX); });
-    ba.addEventListener('pointermove', function(e){ if(dragging) setP(e.clientX); });
+    ba.addEventListener('pointerdown', function(e){ interact(); dragging = true; ba.setPointerCapture(e.pointerId); setPfromX(e.clientX); });
+    ba.addEventListener('pointermove', function(e){ if(dragging) setPfromX(e.clientX); });
     ba.addEventListener('pointerup', function(){ dragging = false; });
     ba.addEventListener('pointercancel', function(){ dragging = false; });
+    ba.addEventListener('keydown', function(e){
+      var cur = parseFloat(ba.style.getPropertyValue('--p')) || 50;
+      if (e.key === 'ArrowLeft') { interact(); setP(cur - 4); e.preventDefault(); }
+      if (e.key === 'ArrowRight') { interact(); setP(cur + 4); e.preventDefault(); }
+    });
   });
+
+  /* demo sweep: show people the handle moves */
+  function sweep(state, delay){
+    if (state.swept || state.touched) return;
+    state.swept = true;
+    if (!motion()) { state.ba.classList.add('afford'); return; }
+    var keyframes = [ {to: 71, dur: 550}, {to: 34, dur: 650}, {to: 50, dur: 500} ];
+    var ki = 0, from = 50, t0 = null;
+    function ease(t){ return t < .5 ? 2*t*t : 1 - Math.pow(-2*t+2, 2)/2; }
+    function step(ts){
+      if (state.touched) { state.raf = null; return; }
+      if (!t0) t0 = ts;
+      var k = keyframes[ki];
+      var t = Math.min(1, (ts - t0) / k.dur);
+      state.setP(from + (k.to - from) * ease(t));
+      if (t >= 1) {
+        from = k.to; ki++; t0 = null;
+        if (ki >= keyframes.length) { state.raf = null; state.ba.classList.add('afford'); return; }
+      }
+      state.raf = requestAnimationFrame(step);
+    }
+    setTimeout(function(){
+      if (state.touched) return;
+      state.raf = requestAnimationFrame(step);
+    }, delay);
+  }
+
+  var seen = 0;
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (!en.isIntersecting) return;
+        io.unobserve(en.target);
+        var state = sliders.filter(function(s){ return s.el === en.target; })[0];
+        if (!state) return;
+        en.target.classList.add('is-in');
+        sweep(state, 350 + (seen % 3) * 220);
+        seen++;
+      });
+    }, { threshold: 0.35 });
+    sliders.forEach(function(s){ io.observe(s.el); });
+  } else {
+    sliders.forEach(function(s){ s.el.classList.add('is-in'); s.ba.classList.add('afford'); });
+  }
+
+  /* iframe auto-height */
+  function postHeight(){
+    try { parent.postMessage({ type: 'dr-tf-height', h: document.documentElement.scrollHeight }, '*'); } catch(e){}
+  }
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(function(){ postHeight(); }).observe(document.documentElement);
+  } else { setInterval(postHeight, 800); }
+  window.addEventListener('load', postHeight);
+  window.addEventListener('orientationchange', function(){ setTimeout(postHeight, 300); });
+})();
 </script>
 </body>
 </html>
