@@ -62,12 +62,12 @@
 <div class="wrap">
   <div class="kicker fade-item">Drag the handle &middot; Real jobs, real photos</div>
   <h1 class="fade-item">Seattle transformations, before &amp; after</h1>
-  <p class="sub fade-item">Every pair below is from a real DuetRight project with its own published story — same room, same camera angle, no staging tricks.</p>
+  <p class="sub fade-item">Every pair below is a real DuetRight project — same room, same camera angle, no staging tricks.</p>
 
   <div class="grid" id="grid"></div>
 
   <a class="cta" href="https://www.duetright.com/start" target="_top">Start your own transformation &rarr;</a>
-  <p class="note">All photos are from projects published on our blog with the client's blessing. Drag the amber handle — left shows the before, right shows the after.</p>
+  <p class="note">All photos are shared with the client's blessing. Drag the amber handle — left shows the before, right shows the after.</p>
 </div>
 
 <script>
@@ -90,10 +90,15 @@
      b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf01189c3e684418c3805b_queen-anne-bathroom-before-full.png",
      a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf038858d61571427f3db7_queen-anne-bathroom-after-full.png",
      url:"https://www.duetright.com/blog/small-bathroom-remodel-in-queen-anne"},
-    {loc:"Queen Anne", title:"The vanity wall, up close", desc:"Same renovation, tighter frame: stock clutter to a wood cabinet, oval mirror, and sconces.",
-     b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf01a1b8267bd720c73116_queen-anne-bathroom-before-vanity.png",
-     a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/68bf02eccbe0d9354be34199_queen-anne-bathroom-after-vanity.png",
-     url:"https://www.duetright.com/blog/small-bathroom-remodel-in-queen-anne"},
+    {loc:"West Seattle", title:"Chris's basement bath, down to the studs", desc:"Open walls, yellow paint, and a vinyl floor to a subway-tile walk-in shower with a linear drain and a warm wood vanity.",
+     b:"images/west-seattle-basement-bath-before.jpg",
+     a:"images/west-seattle-basement-bath-after.jpg"},
+    {loc:"West Seattle", title:"Chris's guest bath, red laminate to glass slider", desc:"Red countertop, brass faucet, and an acrylic tub surround to subway tile, a sliding glass door, grab bars, and a wood vanity.",
+     b:"images/west-seattle-guest-bath-before.jpg",
+     a:"images/west-seattle-guest-bath-after.jpg"},
+    {loc:"West Seattle", title:"Chris's master bath, framed door to walk-in", desc:"Framed glass shower and an almond sink to a walk-in shower with a recessed niche, grab bar, and new vanity.",
+     b:"images/west-seattle-master-bath-before.jpg",
+     a:"images/west-seattle-master-bath-after.jpg"},
     {loc:"West Seattle", title:"Microcement tub-to-shower", desc:"White tile tub combo to a seamless microcement walk-in with matte black fixtures.",
      b:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/69a9c158d342162700420100_before-inside-shower.png",
      a:"https://cdn.prod.website-files.com/664384ae6241636e0aed6b32/69a9c1e6d342162700421ad0_after-bathroom-showr-inside.png",
@@ -131,7 +136,8 @@
         '<div class="tag b">BEFORE</div><div class="tag a">AFTER</div>' +
       '</div>' +
       '<div class="meta"><div class="loc">'+it.loc+'</div><h3>'+it.title+'</h3><p>'+it.desc+'</p>' +
-      '<a href="'+it.url+'" target="_top">Read the story &rarr;</a></div>';
+      (it.url ? '<a href="'+it.url+'" target="_top">Read the story &rarr;</a>'
+              : '<a href="https://www.duetright.com/start" target="_top">Start yours &rarr;</a>') + '</div>';
     grid.appendChild(el);
 
     var ba = el.querySelector('.ba');
