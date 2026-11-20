@@ -1,5 +1,14 @@
 (() => {
   const portfolioHost = document.body.dataset.portfolioOrigin;
+  // Preserve old bookmarked rooms and close-ups when opening the public mirror.
+  const nativePage = document.body.dataset.nativePage;
+  if (nativePage && location.host === portfolioHost) {
+    const destination = new URL(nativePage);
+    destination.search = location.search;
+    destination.hash = location.hash;
+    location.replace(destination.href);
+    return;
+  }
   if (portfolioHost && location.host !== portfolioHost) {
     for (const link of document.querySelectorAll('a[data-local-home]')) {
       link.setAttribute('href', link.dataset.localHome);
