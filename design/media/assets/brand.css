@@ -21,7 +21,7 @@ main .line-link,main .next-link,main .source-link {color:var(--teal)}
 main .steps article {border-top-color:#c0d5d3}
 main .filters button[aria-pressed=true] {background:var(--teal);border-color:var(--teal);color:white}
 main .viewer,.gallery img,main .card-image,.compare-stage,main .feature-pic img {border-radius:12px}
-:where(.dr-mast,.dr-local,.dr-foot,.dr-end) a {text-decoration:none}
+:where(.dr-mast,.dr-foot,.dr-end) a {text-decoration:none}
 .dr-mast,.dr-foot {font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
 .dr-mast {position:sticky;z-index:30;top:0;background:var(--teal);color:white;border-bottom:3px solid var(--gold)}
 .dr-nav-in,.dr-foot-in {width:min(100%,1920px);margin:auto;padding:0 clamp(16px,3.33333vw,64px)}
@@ -40,16 +40,12 @@ main .viewer,.gallery img,main .card-image,.compare-stage,main .feature-pic img 
 .dr-submenu {position:absolute;top:100%;left:0;z-index:2;min-width:200px;background:var(--paper);box-shadow:0 6px 20px #13373a2b;border:1px solid #d5dfda;padding:8px 0;color:var(--ink)}
 .dr-submenu a {display:block;font-size:15px;padding:9px 16px;line-height:1.5;color:var(--ink)}.dr-submenu a:hover {background:var(--mist);color:var(--deep)}
 .dr-menu-toggle,.dr-mobile-phone {display:none}
-.dr-local {background:var(--paper);color:var(--secondary);border-bottom:1px solid #dce5df;font-family:Inter,system-ui,sans-serif}
-.dr-local-in {width:min(1180px,calc(100% - 32px));margin:auto;display:flex;align-items:center;gap:24px;min-height:40px}
-.dr-local a {display:inline-flex;align-items:center;min-height:40px;white-space:nowrap;font-size:13px;font-weight:600;color:var(--deep)}
-.dr-local .dr-local-name {margin-right:auto;color:var(--ink)}.dr-local a:hover {text-decoration:underline;text-underline-offset:3px}
 #approach,#projects,#model {scroll-margin-top:92px}
 .dr-end {background-color:var(--paper);background-image:linear-gradient(90deg,rgba(255,253,250,.98) 0%,rgba(255,253,250,.95) 36%,rgba(255,253,250,.1) 77%),url('brand/bathroom-watercolor.webp');background-repeat:no-repeat;background-size:cover, min(860px,75%) auto;background-position:center,right 52%;border-top:1px solid var(--rule)}
 .dr-end-in {width:min(1180px,calc(100% - 32px));margin:auto;min-height:260px;display:flex;align-items:center;padding:42px 0}
 .dr-end h2 {font-size:clamp(32px,3.6vw,50px)}.dr-end-start {margin-top:22px}
-.dr-foot {display:block;padding:0;background:#2c2b2e;color:#fffdfa;font-size:14px;line-height:1.5}
-.dr-foot-in {padding-bottom:clamp(48px,5.56vw,80px)}
+.dr-foot {display:block;margin:0;padding:0;background:#2c2b2e;color:#fffdfa;font-size:14px;line-height:1.5}
+.dr-foot-in {padding-block:clamp(48px,7.78vw,112px)}
 .dr-foot-main {display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;padding:clamp(56px,5.56vw,80px) 0;border-top:1px solid #424143}
 .dr-foot-identity {display:grid;justify-items:start;gap:20px;color:#d0cecb}.dr-foot-identity .dr-wordmark {margin-bottom:4px}
 .dr-foot-identity strong {font-weight:600}.dr-foot p,.dr-foot h3 {margin:0}
@@ -61,7 +57,12 @@ main .viewer,.gallery img,main .card-image,.compare-stage,main .feature-pic img 
 .dr-foot a {color:#d0cecb}.dr-foot a:hover,.dr-foot a:focus-visible {color:white;text-decoration:underline;text-underline-offset:2px}
 .dr-foot-legal {display:grid;gap:12px;padding-top:24px;border-top:1px solid #454447}
 .dr-legal-line {display:flex;justify-content:space-between;gap:12px}.dr-policies {display:flex;gap:12px}.dr-policies a {color:#fffdfa;text-decoration:underline;text-underline-offset:2px}
-.dr-mast :focus-visible,.dr-foot :focus-visible {outline:3px solid #ffcb59;outline-offset:1px}.dr-local :focus-visible,.dr-end :focus-visible {outline:3px solid var(--deep);outline-offset:2px}
+.dr-mast :focus-visible,.dr-foot :focus-visible {outline:3px solid #ffcb59;outline-offset:1px}.dr-end :focus-visible {outline:3px solid var(--deep);outline-offset:2px}
+@media(min-width:992px) and (max-width:1100px) {
+ .dr-nav-in {gap:16px;padding-inline:16px}
+ .dr-mast .dr-item,.dr-drop summary {padding-inline:6px}
+ .dr-nav-start {padding-inline:16px}
+}
 @media(max-width:991px) {
  .dr-nav-in {height:61px;gap:12px}.dr-wordmark {width:128px}.dr-mobile-phone {display:flex;margin-left:auto;padding-inline:4px}
  .dr-menu-toggle {display:flex;flex-flow:column;align-items:center;justify-content:center;gap:5px;width:44px;height:44px;flex:none;background:transparent;color:white;border:0;border-radius:2px;cursor:pointer}
@@ -74,10 +75,11 @@ main .viewer,.gallery img,main .card-image,.compare-stage,main .feature-pic img 
  .dr-foot-main {grid-template-columns:.85fr 1.15fr;gap:28px}.dr-foot-links {gap:15px}#approach,#projects,#model{scroll-margin-top:76px}
 }
 @media(max-width:680px) {
- .dr-nav-in,.dr-foot-in {padding-inline:16px}.dr-local-in {gap:17px}.dr-local a {font-size:12px}
+ .dr-nav-in,.dr-foot-in {padding-inline:16px}
  .dr-end {background-size:cover,auto 100%;background-position:center,right center;background-image:linear-gradient(90deg,rgba(255,253,250,.95) 10%,rgba(255,253,250,.86) 52%,rgba(255,253,250,.15) 100%),url('brand/bathroom-watercolor.webp')}.dr-end-in {min-height:215px}
+ .dr-foot-in {padding-top:0;padding-bottom:48px}
  .dr-foot-main,.dr-foot-links {grid-template-columns:1fr}.dr-foot-main{padding:48px 0;gap:36px}.dr-foot-links {gap:28px}.dr-foot-legal{font-size:13px}.dr-legal-line {flex-direction:column}.dr-foot-col {gap:10px}.dr-foot-col a {min-height:26px}.dr-foot-col h3{margin-bottom:4px}
 }
-@media(max-width:360px){.dr-nav-in{gap:5px}.dr-wordmark{width:105px}.dr-phone{font-size:13px}.dr-local-in{gap:12px}}
+@media(max-width:360px){.dr-nav-in{gap:5px}.dr-wordmark{width:105px}.dr-phone{font-size:13px}}
 @media(prefers-reduced-motion:reduce){.dr-menu-toggle span{transition:none}}
 .dr-service-note{max-width:45ch;margin:12px 0 0;color:var(--secondary);line-height:1.55}

@@ -207,3 +207,234 @@
   .player-tabs button,.player-toolbar button,.scene-select-label select,.point-buttons button,.retry-scene {min-height:44px}
   .camera-actions [data-camera=closer],.camera-actions [data-camera=farther] {min-width:44px;font-size:1.1rem}
 }
+
+/* Our Design follows the residential site's illustrated hero and content measure. */
+.our-design {
+  --section-space: clamp(48px,6vw,88px);
+  --warm-line: #dedbd5;
+  --warm-background: #f6f5f2;
+}
+.design-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--paper);
+}
+.design-hero-grid {
+  display: flex;
+  align-items: center;
+  min-height: clamp(490px,62svh,640px);
+  padding-block: clamp(56px,7vw,100px);
+}
+.design-hero-image {
+  position: absolute;
+  z-index: -2;
+  inset: 0 0 0 auto;
+  width: min(73%,1280px);
+}
+.design-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 58% 51%;
+}
+.design-hero::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg,var(--paper) 0%,rgba(255,253,250,.98) calc(max(16px,(100% - 1180px)/2) + 340px),rgba(255,253,250,.94) calc(max(16px,(100% - 1180px)/2) + 470px),transparent calc(max(16px,(100% - 1180px)/2) + 740px));
+}
+.design-hero-copy {width: min(100%,560px)}
+.our-design .design-hero h1 {
+  max-width: 12ch;
+  margin: 14px 0 0;
+  font-size: clamp(36px,4.6vw,62px);
+  line-height: 1.04;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.our-design .design-hero-copy .intro {max-width: 51ch; margin-top: 20px}
+.design-hero-actions {display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px}
+.design-hero-actions .btn.outline {
+  color: var(--ink);
+  border: 1.5px solid rgba(66,65,67,.35);
+  background: rgba(255,253,250,.88);
+}
+.design-hero-actions .btn.outline:hover {background: white; border-color: var(--secondary)}
+.our-design .section-heading {gap: clamp(24px,6vw,96px); align-items: end}
+.our-design .section-heading .overline + h2 {margin-top: 12px}
+.our-design .section-heading p:not(.overline) {font-size: clamp(16px,1.15vw,18px); line-height: 1.65}
+.our-design :is(.current-design,.archive) {padding-block: var(--section-space); scroll-margin-top: 72px}
+.current-design-grid {
+  display: grid;
+  grid-template-columns: minmax(0,1.55fr) minmax(245px,.72fr);
+  align-items: center;
+  gap: clamp(30px,5.8vw,86px);
+  margin-top: clamp(26px,4vw,50px);
+}
+.current-design-copy {display: grid; align-content: center; justify-items: start; max-width: 42ch}
+.current-design-copy h3 {text-wrap: balance}
+.current-design-copy p:not(.overline) {margin-top: 14px; line-height: 1.65; color: var(--secondary)}
+.current-design-copy .btn {margin-top: 20px}
+.current-design-copy .line-link {margin-top: 14px}
+.our-design .archive {border-color: var(--warm-line)}
+.our-design .filters {margin: 24px 0; gap: 8px}
+.our-design .filters button {min-height: 42px; font-size: .9rem}
+.our-design .cards {align-items: stretch; gap: clamp(18px,2.1vw,30px)}
+.our-design .cards .card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--warm-line);
+  border-radius: 12px;
+  background: white;
+}
+.our-design .card > a:first-child {display: block}
+.our-design .card .card-image {border-radius: 0}
+.our-design .card-image img {aspect-ratio: 3 / 2}
+.our-design .card .meta {margin: 17px 18px 6px; color: var(--deep)}
+.our-design .card h3 {margin: 0 18px; font-size: clamp(19px,1.5vw,23px); line-height: 1.22; letter-spacing: -.025em}
+.our-design .card .project-date {margin: 8px 18px 0; font-size: .83rem}
+.our-design .card .card-detail {align-self: start; margin: auto 18px 0; padding-block: 12px 14px; line-height: 1.45}
+.our-design .card > a:focus-visible {outline-offset: -3px}
+.our-design .card .circle {display: none}
+.our-design .studio {background: var(--warm-background); border: 0; padding-block: var(--section-space)}
+.our-design .steps {gap: clamp(20px,3vw,46px); margin-top: clamp(28px,3.5vw,46px)}
+.our-design .steps article {padding-top: 18px; border-top: 2px solid var(--gold)}
+.our-design .steps h3 {font-size: clamp(20px,1.65vw,25px); line-height: 1.18}
+.our-design .steps p {line-height: 1.65}
+.our-design .steps .line-link {margin-top: 16px}
+.our-design .field-link {margin-block: 0; padding-block: 32px; border-color: var(--warm-line)}
+.design-availability {background: #ecf4f3; border-block: 1px solid #d6e4e2}
+.availability-inner {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  gap: clamp(30px,7vw,100px);
+  align-items: start;
+  padding-block: var(--section-space);
+}
+.availability-inner h2 {max-width: 19ch; margin: 12px 0}
+.availability-inner p:not(.overline) {max-width: 59ch; color: var(--secondary); line-height: 1.6}
+.availability-inner p + p {margin-top: 12px}
+.availability-inner .btn {margin-top: 22px}
+
+/* Keep the interactive scene on the first screen. Use the same teal, paper and
+   outlined controls as the residential pages around the model. */
+.design-project .design-back {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  min-height: 40px;
+  margin-bottom: 12px;
+  color: var(--deep);
+  font-size: .88rem;
+  font-weight: 600;
+}
+.design-back:hover {text-decoration: underline; text-underline-offset: 3px}
+.project-player .player-tabs {
+  gap: 4px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.project-player .player-tabs button {
+  min-height: 38px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--deep);
+  font-weight: 600;
+}
+.project-player .player-tabs button:hover {background: #e9f2f1}
+.project-player .player-tabs button[aria-pressed=true] {color: white; background: var(--teal)}
+.project-player .player-inner {border-radius: 12px; border-color: #d5dcdc}
+.project-player .player-stage {background: #edf1ef}
+.project-player .player-toolbar {padding: 9px 12px; gap: 8px; border-color: #dce2df}
+.project-player :is(.player-toolbar button,.camera-more summary,.scene-select-label select,.point-buttons button,.compare-actions button) {
+  min-height: 36px;
+  border: 1px solid #cad5d2;
+  border-radius: 8px;
+  padding: 5px 10px;
+  color: var(--deep);
+  background: white;
+  font: 600 .83rem/1.3 Inter,system-ui,sans-serif;
+}
+.project-player .player-toolbar button:enabled:hover,
+.project-player .camera-more summary:hover,
+.project-player .point-buttons button:hover,
+.project-player .compare-actions button:hover {background: #edf5f3; border-color: var(--teal)}
+.project-player .point-buttons button {border-radius: 999px; min-height: 36px; padding-inline: 12px}
+.project-player :is(.point-buttons button,.player-toolbar button,.compare-actions button)[aria-pressed=true] {
+  border-color: var(--teal); background: var(--teal); color: white;
+}
+.project-player .camera-actions {gap: 4px; align-items: flex-start}
+.project-player .camera-more summary {display: flex; gap: 6px; align-items: center; cursor: pointer; list-style: none}
+.project-player .camera-more summary::-webkit-details-marker {display: none}
+.project-player .camera-more summary::after {
+  content: '';
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid;
+  border-bottom: 1.5px solid;
+  transform: translateY(-1px) rotate(45deg);
+}
+.project-player .camera-more[open] summary::after {transform: translateY(2px) rotate(225deg)}
+.project-player .camera-more-options {display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; max-width: 23rem}
+.project-player .player-toolbar .expand-scene {margin-left: auto}
+.project-player .player-hint,.project-player .point-note,.project-player .model-notes {color: #4c5553}
+.project-player .player-basis {margin-top: 12px}
+.project-player .point-panel {margin-top: 10px}
+.project-player :is(button,summary,select):focus-visible {outline: 3px solid var(--teal); outline-offset: 2px}
+
+@media (max-width: 991px) {
+  .design-hero-grid {min-height: 460px}
+  .design-hero-copy {max-width: 49vw}
+  .design-hero::before {background: linear-gradient(90deg,var(--paper) 2%,rgba(255,253,250,.97) 35%,rgba(255,253,250,.88) 48%,transparent 72%)}
+  .current-design-grid {grid-template-columns: minmax(0,1.28fr) minmax(230px,.72fr); gap: 25px}
+  .our-design .cards {grid-template-columns: repeat(2,minmax(0,1fr))}
+}
+@media (max-width: 760px) {
+  .design-hero-grid {display: grid; min-height: 0; padding: 32px 0 0; gap: 0}
+  .design-hero-copy {width: 100%; max-width: 60ch}
+  .design-hero::before {display: none}
+  .design-hero-image {
+    position: relative;
+    inset: auto;
+    z-index: 0;
+    width: calc(100% + 32px);
+    height: clamp(200px,54vw,330px);
+    margin: 12px -16px 0;
+  }
+  .design-hero-image img {object-position: 58% 57%}
+  .design-hero-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,var(--paper),transparent 22%);
+  }
+  .design-hero-actions {margin-top: 20px}
+  .current-design-grid {grid-template-columns: minmax(0,1fr); gap: 23px}
+  .current-design-copy {max-width: 60ch}
+  .availability-inner {grid-template-columns: 1fr; gap: 8px}
+  .design-project .design-back {min-height: 34px; margin-bottom: 4px}
+  .project-player .player-tabs {margin-bottom: 6px}
+}
+@media (max-width: 580px) {
+  .our-design .cards {grid-template-columns: minmax(0,1fr)}
+  .our-design .section-heading {display: block}
+  .our-design .section-heading > p {margin-top: 14px}
+  .our-design .steps {grid-template-columns: 1fr; gap: 24px}
+  .design-hero-actions {gap: 8px}
+  .design-hero-actions .btn {flex: 1 1 100%}
+  .project-player .player-toolbar {padding: 8px}
+  .project-player .camera-actions {max-width: 100%}
+  .project-player .camera-more-options {max-width: 11.5rem}
+  .project-player .scene-select-label {flex-wrap: wrap}
+  .project-player .scene-select-label select {flex: 1 1 0}
+}
+@media (pointer: coarse) {
+  .project-player :is(.player-toolbar button,.player-tabs button,.camera-more summary,.scene-select-label select,.point-buttons button,.compare-actions button) {min-height: 44px}
+}

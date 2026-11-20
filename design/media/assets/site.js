@@ -1,19 +1,21 @@
 'use strict';
-const filters = [...document.querySelectorAll('[data-filter]')];
+{
+const designRoot = document.querySelector('.dr-our-design') || document;
+const filters = [...designRoot.querySelectorAll('[data-filter]')];
 for (const button of filters) {
   button.addEventListener('click', () => {
     const group = button.dataset.filter;
     for (const item of filters) item.setAttribute('aria-pressed', String(item === button));
     let shown = 0;
-    for (const card of document.querySelectorAll('.card[data-location]')) {
+    for (const card of designRoot.querySelectorAll('.card[data-location]')) {
       card.hidden = (group === 'west' && card.dataset.location !== 'West Seattle') ||
         (group === 'completed' && card.dataset.completed !== 'true');
       if (!card.hidden) shown++;
     }
-    document.querySelector('#filter-status').textContent = shown + ' projects shown';
+    designRoot.querySelector('#filter-status').textContent = shown + ' projects shown';
   });
 }
-for (const slider of document.querySelectorAll('.compare-stage input')) {
+for (const slider of designRoot.querySelectorAll('.compare-stage input')) {
   function setSplit() {
     slider.parentElement.style.setProperty('--split', slider.value + '%');
     slider.setAttribute('aria-valuetext', slider.value + ' percent ' + (slider.dataset.leftLabel || 'before'));
@@ -23,7 +25,7 @@ for (const slider of document.querySelectorAll('.compare-stage input')) {
   slider.addEventListener('input', setSplit);
   setSplit();
 }
-const photos = document.querySelectorAll('[data-enlarge]');
+const photos = designRoot.querySelectorAll('[data-enlarge]');
 if (photos.length && typeof HTMLDialogElement !== 'undefined') {
   const dialog = document.createElement('dialog');
   dialog.className = 'project-lightbox';
@@ -95,7 +97,7 @@ if (photos.length && typeof HTMLDialogElement !== 'undefined') {
     });
   }
 }
-for (const panel of document.querySelectorAll('.options-block')) {
+for (const panel of designRoot.querySelectorAll('.options-block')) {
   const choices = panel.querySelectorAll('[data-variant]');
   for (const choice of choices) {
     choice.addEventListener('click', () => {
@@ -106,4 +108,5 @@ for (const panel of document.querySelectorAll('.options-block')) {
       }
     });
   }
+}
 }

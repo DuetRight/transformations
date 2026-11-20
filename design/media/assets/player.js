@@ -1,7 +1,9 @@
 'use strict';
+{
+const designRoot = document.querySelector('.dr-our-design') || document;
 const script = document.currentScript;
 const viewerUrl = new URL(script.dataset.module, document.baseURI).href;
-for (const player of document.querySelectorAll('.project-player')) {
+for (const player of designRoot.querySelectorAll('.project-player')) {
   const scenes = JSON.parse(player.querySelector('.scene-data').textContent);
   const slot = player.querySelector('.model-slot');
   const stage = player.querySelector('.player-stage');
@@ -24,7 +26,7 @@ for (const player of document.querySelectorAll('.project-player')) {
   const stackComparison = player.querySelector('.stack-comparison');
   const reference = player.querySelector('.detail-reference');
   const modelCaption = player.querySelector('.model-caption');
-  const roomLinks = [...document.querySelectorAll('[data-inspect-room]')].filter(link =>
+  const roomLinks = [...designRoot.querySelectorAll('[data-inspect-room]')].filter(link =>
     scenes.some(s => s.key === link.dataset.inspectRoom));
   const comparisons = new Map();
   scenes.forEach((entry, index) => {
@@ -478,7 +480,7 @@ for (const player of document.querySelectorAll('.project-player')) {
     (ready && button ? button : select)?.focus({preventScroll:true});
   });
 
-  for (const link of [...roomLinks, ...document.querySelectorAll('[data-inspect-closeup]')]) {
+  for (const link of [...roomLinks, ...designRoot.querySelectorAll('[data-inspect-closeup]')]) {
     const key = link.dataset.inspectCloseup;
     if (key && !comparisons.has(key)) continue;
     link.addEventListener('click', event => {
@@ -535,4 +537,5 @@ for (const player of document.querySelectorAll('.project-player')) {
   }
   if (roomLinks.length || comparisons.size) window.addEventListener('popstate', readAddress);
   readAddress();
+}
 }
