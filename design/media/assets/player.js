@@ -39,6 +39,29 @@ for (const player of document.querySelectorAll('.project-player')) {
   let overscan = 1;
   let animateOnLoad = false;
   let roomCameraLimits;
+  const projectionResize = new ResizeObserver(applyPhotoProjection);
+
+  function applyPhotoProjection() {
+    if (!model) return;
+    const projection = comparison?.frameProjection;
+    if (!projection) {
+      model.style.removeProperty('transform');
+      return;
+    }
+    const w = model.clientWidth, h = model.clientHeight;
+    if (!w || !h) return;
+    // A crop away from the optical center has a different perspective from
+    // a centered zoom. Map the centered camera into the installation photo.
+    // The recorded matrix uses fractions of the frame; CSS uses pixels.
+    const [a, b, c] = projection;
+    const matrix = [
+      a[0], b[0] * h / w, 0, c[0] / w,
+      a[1] * w / h, b[1], 0, c[1] / h,
+      0, 0, 1, 0,
+      a[2] * w, b[2] * h, 0, c[2]
+    ];
+    model.style.transform = 'translate(-50%, -50%) matrix3d(' + matrix.join(',') + ')';
+  }
 
   stackComparison?.addEventListener('click', () => {
     const stacked = player.classList.toggle('stacked-comparison');
@@ -48,6 +71,9 @@ for (const player of document.querySelectorAll('.project-player')) {
   function setComparison(next) {
     comparison = next;
     if (!compareBar) return;
+    if (next?.frameProjection) projectionResize.observe(slot);
+    else projectionResize.disconnect();
+    applyPhotoProjection();
     player.classList.toggle('comparing-detail', Boolean(next));
     compareBar.hidden = reference.hidden = modelCaption.hidden = !next;
     if (next) {
@@ -82,6 +108,7 @@ for (const player of document.querySelectorAll('.project-player')) {
   function frameComparison(immediate) {
     const selected = comparison;
     const view = model;
+    applyPhotoProjection();
     // Updating a camera limit makes model-viewer snap to its current goal.
     // Apply it before the camera move, while the goal is still the room.
     const radius = parseFloat(selected.orbit.trim().split(/\s+/)[2]);
