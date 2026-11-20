@@ -1,6 +1,27 @@
 'use strict';
 {
 const designRoot = document.querySelector('.dr-our-design') || document;
+// The complete room still opens when a large case's optional detail register is unavailable.
+for (const data of designRoot.querySelectorAll('.scene-data[data-fallback-viewer]')) {
+  const player = data.closest('.project-player');
+  const label = player.querySelector('.scene-select-label');
+  if (label) label.hidden = true;
+  const walk = player.querySelector('[data-medium="walk"]');
+  if (walk) walk.hidden = true;
+  const source = data.dataset.fallbackViewer;
+  for (const link of designRoot.querySelectorAll('a[href^="?view="]')) {
+    link.href = new URL(link.getAttribute('href'), source).href;
+    link.removeAttribute('data-inspect-room');
+    link.removeAttribute('data-inspect-closeup');
+  }
+  const alternative = document.createElement('a');
+  alternative.href = new URL(location.search + location.hash, source).href;
+  alternative.textContent = 'Open the full model and photo viewer';
+  const notice = document.createElement('p');
+  notice.className = 'player-hint';
+  notice.append('The detailed views could not load. ', alternative);
+  player.append(notice);
+}
 const filters = [...designRoot.querySelectorAll('[data-filter]')];
 for (const button of filters) {
   button.addEventListener('click', () => {
@@ -48,7 +69,8 @@ if (photos.length && typeof HTMLDialogElement !== 'undefined') {
   caption.setAttribute('aria-live', 'polite');
   controls.append(previous, position, next, close);
   dialog.append(controls, large, caption);
-  document.body.append(dialog);
+  const container = designRoot === document ? document.body : designRoot;
+  container.append(dialog);
   let group = [];
   let index = 0;
   let opener;

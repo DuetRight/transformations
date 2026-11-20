@@ -121,6 +121,12 @@
   .project-player model-viewer .dr-detail-pin { width: 35px; height: 35px; }
   .project-player model-viewer .dr-detail-pin::before { width: 25px; height: 25px; }
 }
+.project-player.comparing-room {--detail-aspect: 1.7777778}
+.project-player.comparing-room .model-slot model-viewer {
+  left: calc(50% + var(--room-offset-x,0%));
+  top: calc(50% + var(--room-offset-y,0%));
+}
+
 /* Original project photographs alongside the corresponding Blender study. */
 .evidence-section{border-top:1px solid var(--rule);padding-block:clamp(36px,5vw,70px);scroll-margin-top:90px}
 .evidence-section>.overline{margin-bottom:13px}.evidence-section>h2{margin-bottom:30px}

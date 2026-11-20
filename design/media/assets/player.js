@@ -28,11 +28,13 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
   const modelCaption = player.querySelector('.model-caption');
   const roomLinks = [...designRoot.querySelectorAll('[data-inspect-room]')].filter(link =>
     scenes.some(s => s.key === link.dataset.inspectRoom));
+  const compareRoomTab = player.querySelector('[data-medium="room"]');
   const comparisons = new Map();
   scenes.forEach((entry, index) => {
     if (entry.walk) return;
+    if (entry.roomComparison) comparisons.set(entry.roomComparison.key, {index, comparison:entry.roomComparison});
     entry.points?.forEach((point, pointIndex) => {
-      if (point.comparison) comparisons.set(point.comparison.key, {index, pointIndex, point});
+      if (point.comparison) comparisons.set(point.comparison.key, {index, pointIndex, point, comparison:point.comparison});
     });
   });
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -76,6 +78,12 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
     if (next?.frameProjection) projectionResize.observe(slot);
     else projectionResize.disconnect();
     applyPhotoProjection();
+    const fullRoom = Boolean(next && next === scene.roomComparison);
+    if (fullRoom !== player.classList.contains('comparing-room')) {
+      player.classList.toggle('stacked-comparison', fullRoom);
+      stackComparison.setAttribute('aria-pressed', String(fullRoom));
+    }
+    player.classList.toggle('comparing-room', fullRoom);
     player.classList.toggle('comparing-detail', Boolean(next));
     compareBar.hidden = reference.hidden = modelCaption.hidden = !next;
     if (next) {
@@ -85,6 +93,10 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
       // vertical extent sets the margin for either portrait or landscape.
       overscan = Math.abs(Math.cos(radians)) +
         Math.max(frameAspect, 1 / frameAspect) * Math.abs(Math.sin(radians));
+      const [dx, dy] = next.frameOffset || [0, 0];
+      overscan *= 1 + 2 * Math.max(Math.abs(dx), Math.abs(dy));
+      player.style.setProperty('--room-offset-x', (dx * 100) + '%');
+      player.style.setProperty('--room-offset-y', (dy * 100) + '%');
       player.style.setProperty('--detail-aspect', String(frameAspect));
       player.style.setProperty('--detail-overscan', String(overscan));
       player.style.setProperty('--detail-roll', next.roll + 'deg');
@@ -98,6 +110,8 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
       poster.src = next.render;
       poster.alt = next.renderAlt;
     } else {
+      player.style.removeProperty('--room-offset-x');
+      player.style.removeProperty('--room-offset-y');
       player.style.removeProperty('--detail-aspect');
       player.style.removeProperty('--detail-overscan');
       player.style.removeProperty('--detail-roll');
@@ -172,7 +186,7 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
   function inspect(key, record = true) {
     const selection = comparisons.get(key);
     if (!selection) return;
-    const next = selection.point.comparison;
+    const next = selection.comparison;
     if (record) writeView(key, selection.index, true, true);
     if (scene !== scenes[selection.index] || loadSequence === 0 ||
         (!ready && stage.getAttribute('aria-busy') === 'false')) {
@@ -186,8 +200,8 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
       if (ready) frameComparison(false);
       else animateOnLoad = record;
     }
-    selectPoint(pointButtons.children[selection.pointIndex]);
-    pointNote.textContent = selection.point.note;
+    selectPoint(selection.point ? pointButtons.children[selection.pointIndex] : null);
+    if (selection.point) pointNote.textContent = selection.point.note;
     if (record && !player.classList.contains('expanded-player')) {
       player.scrollIntoView({block:'start', behavior:'instant'});
     }
@@ -284,8 +298,10 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
     pointPanel.classList.toggle('walk-points',inside);
     pointPanel.hidden = !interactive || !ready || !(scene.points?.length || inside);
     hint.textContent = interactive ? (inside ? 'Tap a floor circle or choose a stop · Drag to look around' : dragHint) : photo.alt;
+    if (compareRoomTab) compareRoomTab.hidden = !scene.roomComparison;
     for (const button of mediumButtons) {
-      const selected = interactive && inside ? 'walk' : medium;
+      const isRoomPair = comparison && comparison === scene.roomComparison;
+      const selected = interactive && inside ? 'walk' : (isRoomPair ? 'room' : medium);
       button.setAttribute('aria-pressed', String(button.dataset.medium === selected));
     }
     for (const button of controls.querySelectorAll('button')) button.disabled = !ready;
@@ -331,7 +347,7 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
     model = null;
     ready = false;
     medium = 'model';
-    if (detail || comparison) setComparison(detail);
+    if (detail || comparison || player.classList.contains('comparing-detail')) setComparison(detail);
     else {
       poster.src = scene.poster;
       poster.alt = scene.title + ' — Blender rendering';
@@ -440,6 +456,8 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
   for (const button of mediumButtons) {
     button.addEventListener('click', () => {
       const choice = button.dataset.medium;
+      if (choice === 'room' && scene.roomComparison) return inspect(scene.roomComparison.key);
+      if (choice === 'model' && comparison && comparison === scene.roomComparison) return chooseScene(scenes.indexOf(scene));
       if (choice === 'walk' && !scene.walk) {
         const matching = scenes.findIndex(s => s.walk && s.tourGroup === scene.tourGroup);
         return chooseScene(matching === -1 ? walkIndex : matching);
@@ -529,6 +547,7 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
   function readAddress() {
     const requested = new URLSearchParams(location.search).get('view');
     if (comparisons.has(requested)) return inspect(requested, false);
+    if (!requested && scenes[0].roomComparison) return inspect(scenes[0].roomComparison.key, false);
     const stored = history.state?.drScene;
     const fallback = Number.isInteger(stored) && scenes[stored] ? stored : 0;
     const index = requested === 'walk' ? walkIndex : scenes.findIndex(s => s.key && s.key === requested);
