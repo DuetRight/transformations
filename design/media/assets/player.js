@@ -283,7 +283,7 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
   function updateMedium() {
     const interactive = medium === 'model';
     const inside = Boolean(scene.walk);
-    player.querySelector('.player-basis').textContent = interactive ? scene.basis : scene.photoBasis;
+    player.querySelector('.player-basis').textContent = interactive ? (comparison?.basis || scene.basis) : scene.photoBasis;
     slot.hidden = !interactive;
     poster.hidden = !interactive || ready;
     photo.hidden = interactive;
