@@ -1,4 +1,10 @@
 (() => {
+  const portfolioHost = document.body.dataset.portfolioOrigin;
+  if (portfolioHost && location.host !== portfolioHost) {
+    for (const link of document.querySelectorAll('a[data-local-home]')) {
+      link.setAttribute('href', link.dataset.localHome);
+    }
+  }
   const header = document.querySelector('[data-brand-nav]');
   if (!header) return;
   const menu = header.querySelector('.dr-primary');
