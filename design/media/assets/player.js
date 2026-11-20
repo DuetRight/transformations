@@ -481,7 +481,12 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
     });
   }
   const select = player.querySelector('.scene-select');
-  select?.addEventListener('change', () => chooseScene(Number(select.value)));
+  select?.addEventListener('change', () => {
+    const index = Number(select.value);
+    const doorway = scenes[index].roomComparison;
+    if (doorway) inspect(doorway.key);
+    else chooseScene(index);
+  });
   retry.addEventListener('click', () => {
     if (comparison) inspect(comparison.key, false);
     else show(select ? Number(select.value) : 0);
@@ -499,7 +504,7 @@ for (const player of designRoot.querySelectorAll('.project-player')) {
   });
 
   for (const link of [...roomLinks, ...designRoot.querySelectorAll('[data-inspect-closeup]')]) {
-    const key = link.dataset.inspectCloseup;
+    const key = link.dataset.inspectCloseup || link.dataset.roomPair;
     if (key && !comparisons.has(key)) continue;
     link.addEventListener('click', event => {
       if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button > 0) return;
